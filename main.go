@@ -1,3 +1,8 @@
+// @title           Gin API Example
+// @version         1.0
+// @description     This is a sample server built with Gin and GORM.
+// @host            localhost:8080
+// @BasePath        /
 package main
 
 import (
@@ -8,6 +13,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	_ "github.com/AshalIbrahim/ginapi/docs" // 👈 replace with actual module name
+	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
 )
 
 
@@ -51,6 +60,13 @@ func main() {
 	initDB()
 	r := gin.Default()
 
+	// @Summary      Get all users
+// @Description  Returns a list of all users
+// @Tags         users
+// @Produce      json
+// @Success      200  {array}  Users
+// @Router       /users [get]
+
 	r.GET("/users", func(c *gin.Context) {
 		var users []Users
 		result := DB.Find(&users)
@@ -60,6 +76,16 @@ func main() {
 		}
 		c.JSON(http.StatusOK, users)
 	})
+
+	// @Summary      Create a user
+// @Description  Adds a new user to the database
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        user  body  Users  true  "User to create"
+// @Success      201   {object}  Users
+// @Router       /users [post]
+
 
 	r.POST("/users", func(c *gin.Context) {
 		var newUser Users
@@ -76,6 +102,8 @@ func main() {
 
 		c.JSON(http.StatusCreated, newUser)
 	})
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":8080")
 }
