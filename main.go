@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"os"
 
-	_ "github.com/AshalIbrahim/ginapi/docs" // 👈 replace with actual module name
+	_ "github.com/AshalIbrahim/ginApi/docs" // 👈 replace with actual module name
 	ginSwagger "github.com/swaggo/gin-swagger"
 	swaggerFiles "github.com/swaggo/files"
 )
@@ -55,7 +55,7 @@ func initDB() {
 		log.Fatal("Migration failed:", err)
 	}
 }
-
+// 
 func main() {
 	initDB()
 	r := gin.Default()
@@ -66,15 +66,15 @@ func main() {
 // @Produce      json
 // @Success      200  {array}  Users
 // @Router       /users [get]
-	r.GET("/users", func(c *gin.Context) {
-		var users []Users
-		result := DB.Find(&users)
-		if result.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, users)
-	})
+r.GET("/users", func(c *gin.Context) {
+	var users []Users
+	result := DB.Find(&users)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+})
 
 // @Summary      Create a user
 // @Description  Adds a new user to the database
@@ -84,21 +84,21 @@ func main() {
 // @Param        user  body  Users  true  "User to create"
 // @Success      201   {object}  Users
 // @Router       /users [post]
-	r.POST("/users", func(c *gin.Context) {
-		var newUser Users
-		if err := c.ShouldBindJSON(&newUser); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
-			return
-		}
+r.POST("/users", func(c *gin.Context) {
+	var newUser Users
+	if err := c.ShouldBindJSON(&newUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
 
-		result := DB.Create(&newUser)
-		if result.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-			return
-		}
+	result := DB.Create(&newUser)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
-		c.JSON(http.StatusCreated, newUser)
-	})
+	c.JSON(http.StatusCreated, newUser)
+})
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
