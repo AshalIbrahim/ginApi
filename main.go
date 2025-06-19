@@ -13,13 +13,11 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/AshalIbrahim/ginApi/docs" // 👈 replace with actual module name
+	_ "github.com/AshalIbrahim/ginApi/docs" // 👈 correct path to docs
 	ginSwagger "github.com/swaggo/gin-swagger"
 	swaggerFiles "github.com/swaggo/files"
 )
 
-
-// User model with GORM tags
 type Users struct {
 	ID   uint   `json:"id" gorm:"primaryKey"`
 	Name string `json:"name"`
@@ -29,13 +27,11 @@ type Users struct {
 var DB *gorm.DB
 
 func initDB() {
-	
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Get variables from environment
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
@@ -49,25 +45,34 @@ func initDB() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	err = DB.AutoMigrate(&Users{})
-	if err != nil {
+	if err := DB.AutoMigrate(&Users{}); err != nil {
 		log.Fatal("Migration failed:", err)
 	}
 }
-
 
 func main() {
 	initDB()
 	r := gin.Default()
 
-r.GET("/users",AllUsers)
+	// Grouping routes under /api
+	api := r.Group("/api")
+	{
+		v1 := api.Group("/v1")
+		{
+			v1.GET("/users", AllUsers)
+			v1.POST("/users", createUser)
+			v1.PUT("/users/:id", updateUser)
+			v1.DELETE("/users/:id", deleteUser) 
+		}
+		v2 := api.Group("/v2")
+		{
+			v2.GET("/", V2api)
+		}
+	}
 
-r.POST("/users",createUser)
+	// Serve custom Swagger UI and Swagger docs
+	r.StaticFile("/swagger-ui", "./swagger-ui.html")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-r.Run(":8080")
+	r.Run(":8080")
 }
-// This code sets up a simple REST API using Gin and GORM with PostgreSQL.
-// It includes endpoints to retrieve all users and create a new user.
-// Make sure to have PostgreSQL running and the database 'practiceDB' created before running this code.

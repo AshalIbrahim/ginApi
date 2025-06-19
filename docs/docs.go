@@ -15,14 +15,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "description": "Returns a list of all users",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "users.CR"
+                    "api|users"
                 ],
                 "summary": "Get all users",
                 "responses": {
@@ -46,7 +46,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users.CR"
+                    "api|users"
                 ],
                 "summary": "Create a user",
                 "parameters": [
@@ -65,6 +65,29 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/main.Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v2/": {
+            "get": {
+                "description": "This is an example endpoint for v2",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api|users.V2"
+                ],
+                "summary": "V2 API Example",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
