@@ -30,7 +30,7 @@ paths:
             type: array
       summary: Get all users
       tags:
-      - users
+      - users.CR
     post:
       consumes:
       - application/json
@@ -51,5 +51,5 @@ paths:
             $ref: '#/definitions/main.Users'
       summary: Create a user
       tags:
-      - users
+      - users.CR
 swagger: "2.0"

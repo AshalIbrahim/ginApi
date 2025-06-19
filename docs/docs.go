@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "users.CR"
                 ],
                 "summary": "Get all users",
                 "responses": {
@@ -46,7 +46,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "users.CR"
                 ],
                 "summary": "Create a user",
                 "parameters": [
