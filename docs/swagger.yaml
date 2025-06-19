@@ -1,9 +1,55 @@
 basePath: /
+definitions:
+  main.Users:
+    properties:
+      age:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: This is a sample server built with Gin and GORM.
   title: Gin API Example
   version: "1.0"
-paths: {}
+paths:
+  /users:
+    get:
+      description: Returns a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Users'
+            type: array
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Adds a new user to the database
+      parameters:
+      - description: User to create
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.Users'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Users'
+      summary: Create a user
+      tags:
+      - users
 swagger: "2.0"

@@ -9,7 +9,7 @@ import(
 // allUsers godoc
 // @Summary      Get all users
 // @Description  Returns a list of all users
-// @Tags         users
+// @Tags         users.CR
 // @Produce      json
 // @Success      200  {array}  Users
 // @Router       /users [get]
@@ -27,7 +27,7 @@ func AllUsers(c *gin.Context) {
 // createUser godoc
 // @Summary      Create a user
 // @Description  Adds a new user to the database
-// @Tags         users
+// @Tags         users.CR
 // @Accept       json
 // @Produce      json
 // @Param        user  body  Users  true  "User to create"
